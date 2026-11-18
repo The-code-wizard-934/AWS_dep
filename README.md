@@ -1,16 +1,110 @@
-# React + Vite
+# Student Management System — Starter
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A small full-stack starter with:
+- React + Vite frontend
+- Flask REST API backend
+- PostgreSQL database
+- SQLAlchemy ORM
 
-Currently, two official plugins are available:
+## Requirements
+- Node.js 20.19+ or 22.12+
+- Python 3.10+
+- PostgreSQL 14+ (or Docker Desktop)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 1. Start PostgreSQL
 
-## React Compiler
+From the project root:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+docker compose up -d
+```
 
-## Expanding the Oxlint configuration
+This starts PostgreSQL on `localhost:5432` with:
+- Database: `student_db`
+- Username: `postgres`
+- Password: `postgres`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+If you already have PostgreSQL installed, create a database named `student_db` and update `backend/.env` to match your local credentials instead.
+
+## 2. Start the Flask backend
+
+Open a terminal:
+
+```bash
+cd backend
+python -m venv venv
+```
+
+Activate the virtual environment:
+
+**Windows PowerShell**
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+**Windows CMD**
+```bat
+venv\Scripts\activate
+```
+
+**macOS/Linux**
+```bash
+source venv/bin/activate
+```
+
+Install dependencies and create the environment file:
+
+```bash
+pip install -r requirements.txt
+```
+
+Copy `.env.example` to `.env` (Windows PowerShell: `Copy-Item .env.example .env`; macOS/Linux: `cp .env.example .env`).
+
+Start the API:
+
+```bash
+python run.py
+```
+
+The API runs at `http://127.0.0.1:5000`.
+
+Test it in your browser:
+- `http://127.0.0.1:5000/api/health`
+- `http://127.0.0.1:5000/api/tasks`
+
+## 3. Start the React frontend
+
+Open a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the URL printed by Vite, usually `http://localhost:5173`.
+
+## API endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/health` | Check API and database |
+| GET | `/api/tasks` | List tasks |
+| POST | `/api/tasks` | Create a task |
+| PATCH | `/api/tasks/<id>` | Update title/status |
+| DELETE | `/api/tasks/<id>` | Delete a task |
+
+Example POST body:
+
+```json
+{
+  "title": "Complete React basics",
+  "description": "Learn components and state"
+}
+```
+
+## Important notes
+- Tables are created automatically on first backend startup.
+- This is a learning starter, not a production-ready system.
+- It intentionally has no login yet. Add authentication before storing real or private student data.
+- Never commit `.env`, passwords, or secret keys to GitHub.
